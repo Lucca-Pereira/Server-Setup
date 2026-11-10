@@ -81,7 +81,6 @@ The design rules are few and applied everywhere:
 | OctoPrint + mjpg-streamer | USB-connected 3D printer and webcam | Tailnet HTTPS | [`stacks/octoprint`](stacks/octoprint) |
 | OctoEverywhere companion + socat | Remote access to a LAN-attached printer | Outbound + tailnet proxy | [`stacks/elegoo-connect`](stacks/elegoo-connect) |
 | Homarr | Service launcher dashboard | LAN / tailnet, :7575 | [`stacks/Homarr`](stacks/Homarr) |
-| Homepage | Status and metrics dashboard | Tailnet HTTPS | [`stacks/homepage`](stacks/homepage) |
 | Ollama | Local LLM runtime for a side project (host service, CPU only) | LAN / tailnet, :11434 | [`host/ollama.service`](host/ollama.service) |
 | Glances | System metrics web UI (host service) | LAN / tailnet, :61208 | n/a |
 
