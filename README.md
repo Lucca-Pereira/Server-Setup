@@ -14,9 +14,8 @@ This repo documents how it is built and why. Everything under `stacks/`, `script
 6. [Host layer](#host-layer)
 7. [Monitoring and automation](#monitoring-and-automation)
 8. [Security](#security)
-9. [Design decisions and lessons](#design-decisions-and-lessons)
-10. [Repo layout](#repo-layout)
-11. [Reproducing it](#reproducing-it)
+9. [Repo layout](#repo-layout)
+10. [Reproducing it](#reproducing-it)
 
 ## At a glance
 
