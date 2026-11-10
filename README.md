@@ -170,36 +170,7 @@ The split is deliberate: boring, frequent faults (a DHCP lease changing) are fix
 
 ## Security
 
-**Exposure**
-
-- No router port forwarding. Private services are reachable only on the LAN or over Tailscale.
-- One public endpoint, `ko-sync`, with the container bound to `127.0.0.1`. Authentication is a bearer token for the app and Google OAuth with an email allow-list for Claude.
-- SSH: keys only, password and root login disabled. fail2ban and ufw are active.
-- Secrets live in `.env` files and are never committed. This repo contains only variable names (`.env.example`).
-
 **Auditing.** I audit the host with [Lynis](https://cisofy.com/lynis/); the current hardening index is 71 out of 100. I treat the remaining suggestions as a backlog rather than a finished job.
-
-**Known gaps.** Listing these is deliberate:
-
-- **No off-site backup.** The largest risk to the data.
-- **Samba allows guest write access.** Fine on a trusted home LAN, but anyone on the network can modify the synced files. Fix: require a user, make it read-only.
-- **Ollama has no authentication and listens on all interfaces**, as does Glances. Fix: bind to localhost or firewall the ports.
-- **Homarr mounts the Docker socket**, which is effectively root on the host. It is not publicly exposed; the better fix is a read-only socket proxy.
-- **Several images use `latest` tags.** Convenient, not reproducible. Homarr is pinned; the rest should be, with a regular update routine.
-- **Host-network containers** bypass Docker's network isolation, and some auxiliary ports (for example 6379) are listening on all interfaces. Each needs auditing against the firewall rules.
-- **Some secrets historically lived inline in compose files.** They should move to `.env` everywhere, which is how the copies in this repo are written.
-
-## Design decisions and lessons
-
-**Phone backup: Nextcloud auto-upload to Syncthing.** The Nextcloud Android app's auto-upload kept failing with "file not found", later a generic "folder error", and phone-side logs said nothing more. I turned on Debug log level in Nextcloud and read the server log while attempting test uploads, correlating timestamps. The WebDAV layer reported that the configured destination folder `/InstantUpload/Camera` no longer existed on the server, so every upload failed before a photo was written. The lesson: with a vague client error, the server log is often the faster route to the cause. Nextcloud's uploader had already broken once from a path mismatch and fails silently, so backup moved to Syncthing, where a broken folder is visible. Nextcloud stays for the things that still use it.
-
-**Funnel plus localhost for the public service.** See [networking](#networking-and-access): it fixed a reboot-ordering failure and shrank the exposed surface.
-
-**One compose project per service.** Independent stacks, with a folder that doubles as documentation and as a unit I can move to another machine.
-
-**Self-healing only where the failure is mundane.** See [monitoring](#monitoring-and-automation).
-
-**Local LLM host.** Ollama runs on the box so prompts and data stay on my own hardware. Without a usable GPU the model choice is limited to small models, which is acceptable for the use case.
 
 ## Repo layout
 
